@@ -16,7 +16,16 @@ type WalletState = {
 
 type StellarWalletButtonProps = {
   className?: string;
+  size?: "default" | "large";
 };
+
+const connectButtonClass =
+  "inline-flex min-h-10.5 cursor-pointer items-center justify-center rounded-full border-0 bg-[linear-gradient(180deg,var(--lime),var(--lime-2))] px-5 py-3 text-[13px] font-black text-[#102014] shadow-[0_18px_40px_rgba(216,255,40,0.18)] transition-transform hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--lime)] disabled:cursor-wait disabled:opacity-70";
+
+const walletChipClass =
+  "inline-flex min-h-10.5 min-w-36 cursor-pointer flex-col items-center justify-center gap-0.5 rounded-full border border-[rgba(216,255,40,0.52)] bg-[rgba(247,248,242,0.94)] px-4 py-2 text-[var(--ink)] shadow-[0_18px_40px_rgba(216,255,40,0.14)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--lime)]";
+
+const largeClass = "min-h-13 px-7 py-4";
 
 const shortenAddress = (address: string) =>
   `${address.slice(0, 5)}...${address.slice(-5)}`;
@@ -29,11 +38,15 @@ const getErrorMessage = (error: unknown) => {
   return "Unable to connect wallet.";
 };
 
-export function StellarWalletButton({ className = "" }: StellarWalletButtonProps) {
+export function StellarWalletButton({
+  className = "",
+  size = "default",
+}: StellarWalletButtonProps) {
   const [wallet, setWallet] = useState<WalletState | null>(null);
   const [status, setStatus] = useState("Connect wallet");
   const [errorMessage, setErrorMessage] = useState("");
   const [isPending, setIsPending] = useState(false);
+  const sizeClass = size === "large" ? largeClass : "";
 
   useEffect(() => {
     let isMounted = true;
@@ -116,32 +129,43 @@ export function StellarWalletButton({ className = "" }: StellarWalletButtonProps
 
   if (wallet) {
     return (
-      <div className={`wallet-connect ${className}`.trim()}>
+      <div className={`relative inline-flex flex-col items-center gap-2 ${className}`.trim()}>
         <button
           type="button"
-          className="wallet-chip"
+          className={`${walletChipClass} ${sizeClass}`.trim()}
           onClick={clearWallet}
           aria-label="Clear connected wallet"
         >
-          <span>{wallet.network}</span>
-          <strong>{shortenAddress(wallet.address)}</strong>
+          <span className="text-[10px] font-black uppercase leading-none text-[rgba(7,17,22,0.58)]">
+            {wallet.network}
+          </span>
+          <strong className="font-mono text-xs leading-tight text-[var(--ink)]">
+            {shortenAddress(wallet.address)}
+          </strong>
         </button>
       </div>
     );
   }
 
   return (
-    <div className={`wallet-connect ${className}`.trim()}>
+    <div className={`relative inline-flex flex-col items-center gap-2 ${className}`.trim()}>
       <button
         type="button"
-        className="lime-button"
+        className={`${connectButtonClass} ${sizeClass}`.trim()}
         onClick={connectWallet}
         disabled={isPending}
         aria-busy={isPending}
       >
         {status}
       </button>
-      {errorMessage ? <small role="status">{errorMessage}</small> : null}
+      {errorMessage ? (
+        <small
+          className="absolute left-1/2 top-[calc(100%+8px)] w-max max-w-[min(260px,78vw)] -translate-x-1/2 text-center text-[11px] font-extrabold leading-tight text-[#ffd8d8]"
+          role="status"
+        >
+          {errorMessage}
+        </small>
+      ) : null}
     </div>
   );
 }
