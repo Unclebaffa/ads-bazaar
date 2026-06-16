@@ -11,7 +11,7 @@ export default function BusinessDashboardPage() {
     <DashboardShell
       activities={businessActivity}
       campaigns={businessCampaigns}
-      ctaHref="#campaign-workspace"
+      ctaHref="/dashboard/campaigns/new"
       ctaLabel="Create a campaign draft with budget, proof rules, creator slots, and payout asset."
       eyebrow="Business dashboard"
       metrics={businessMetrics}
