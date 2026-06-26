@@ -16,6 +16,8 @@ const PAGE_SIZE = 6;
 export default function MarketplacePage() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
+  const [selectedAsset, setSelectedAsset] = useState("");
+  const [selectedType, setSelectedType] = useState("");
 
   const filtered = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -36,6 +38,16 @@ export default function MarketplacePage() {
     setPage(1);
   }
 
+  function handleAssetChange(value: string) {
+    setSelectedAsset(value);
+    setPage(1);
+  }
+
+  function handleTypeChange(value: string) {
+    setSelectedType(value);
+    setPage(1);
+  }
+
   return (
     <>
       <Navbar />
@@ -44,6 +56,10 @@ export default function MarketplacePage() {
         <MarketplaceFilters
           searchValue={search}
           onSearchChange={handleSearchChange}
+          selectedAsset={selectedAsset}
+          onAssetChange={handleAssetChange}
+          selectedType={selectedType}
+          onTypeChange={handleTypeChange}
         />
         <MarketplaceGridHeader count={filtered.length} />
         <MarketplaceGrid campaigns={paged} />

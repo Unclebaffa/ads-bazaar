@@ -6,9 +6,17 @@ import { quickTags } from "./marketplace-data";
 export function MarketplaceFilters({
   searchValue,
   onSearchChange,
+  selectedAsset,
+  onAssetChange,
+  selectedType,
+  onTypeChange,
 }: {
   searchValue: string;
   onSearchChange: (value: string) => void;
+  selectedAsset: string;
+  onAssetChange: (value: string) => void;
+  selectedType: string;
+  onTypeChange: (value: string) => void;
 }) {
   return (
     <div className="border border-outline-variant bg-surface-container p-6 mt-12">
