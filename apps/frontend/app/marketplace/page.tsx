@@ -21,10 +21,13 @@ export default function MarketplacePage() {
 
   const filtered = useMemo(() => {
     const query = search.trim().toLowerCase();
-    return marketplaceCampaigns.filter(
-      (c) => query === "" || c.title.toLowerCase().includes(query),
-    );
-  }, [search]);
+    return marketplaceCampaigns.filter((c) => {
+      const matchesSearch = query === "" || c.title.toLowerCase().includes(query);
+      const matchesAsset = selectedAsset === "" || c.currency === selectedAsset;
+      const matchesType = selectedType === "" || c.status === selectedType;
+      return matchesSearch && matchesAsset && matchesType;
+    });
+  }, [search, selectedAsset, selectedType]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const safePage = Math.min(page, totalPages);
